@@ -10,7 +10,7 @@ import pandas as pd
 style.use("ggplot")
 
 #SIZE = 10
-HM_EPISODES = 35000
+HM_EPISODES = 25000
 MOVE_PENALTY = 1
 ENEMY_PENALTY = 10
 FOOD_REWARD = 10
@@ -18,7 +18,7 @@ epsilon = 0.9
 EPS_DECAY = 0.9998
 SHOW_EVERY = 3000
 invest = 2
-games = 30
+games = 20
 carteira = invest*games
 time_h = 0
 lucro0 = 0
@@ -45,12 +45,12 @@ probs = [[4.33,3.25,1.85],
          [1.44,4,7.25],
          [1.35,4.4,9],
          [2.6,3.1,2.7]]
-df = pd.read_csv('oddseprobs.csv')
-ml_result = df.loc[10:39,'v':'d'].values.tolist()
-probs = df.loc[10:39,'odd_v':'odd_d'].values.tolist()
+df = pd.read_csv('C:/Users/Octavio/Desktop/oddseprobs.csv')
+ml_result = df.loc[10:29,'v':'d'].values.tolist()
+probs = df.loc[10:29,'odd_v':'odd_d'].values.tolist()
 #probs [v,e,d]
 results_g = [3.25,2.1,1.44,1.35,2.7] # [e,v,v]
-results_g = df.loc[10:39,'odd_venc'].values.tolist()
+results_g = df.loc[10:29,'odd_venc'].values.tolist()
 
 def bet(idx_game,value):
     if value == results_g[idx_game]:
@@ -92,7 +92,7 @@ def action(choice,time):
     odds = [1]
     #total = 0
     if choice == 0:
-        aposta = (0)
+        aposta = (1)
         total = strategy(aposta,'ml',time)       
     elif choice == 1:
         aposta = (1)
@@ -186,7 +186,7 @@ for episode in range(HM_EPISODES):
         elif j == 1:
             l_tot = result[1][0]
             
-        lucro = (l_tot*invest) - invest
+        lucro = (l_tot*invest) - erros*invest
         #lucro = result[0][0]*invest*result[1][0] + result[0][1]*invest*result[1][1] + result[0][2]*invest*result[1][2] - erros*invest
         
         reward = lucro
@@ -215,7 +215,7 @@ for episode in range(HM_EPISODES):
         time_h += 1
          
         #stop loss ou take profit
-        if reward > 10.9*carteira:
+        if reward > 0.9*carteira:
             break
 
     episode_rewards.append(episode_reward)
